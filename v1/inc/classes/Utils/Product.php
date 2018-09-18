@@ -1,5 +1,10 @@
 <?php
 
+namespace MR4Web_API\Utils;
+
+use MR4Web_API\Connections\DB;
+use MR4Web_API\Configs\Config;
+
 class Product {
 	private $_name;
 	private $_version = 0;
@@ -19,7 +24,7 @@ class Product {
 		$stm = self::$DB->query("SELECT * FROM `product` WHERE `name`='{$this->getName()}'");
 		if ($stm->rowCount())
 		{
-			$this->_data = $stm->fetch(PDO::FETCH_ASSOC);
+			$this->_data = $stm->fetch(\PDO::FETCH_ASSOC);
 		}
 	}
 

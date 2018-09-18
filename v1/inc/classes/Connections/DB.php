@@ -1,5 +1,9 @@
 <?php
 
+namespace MR4Web_API\Connections;
+
+use MR4Web_API\Configs\Config;
+
 class DB 
 {
 	private static $_DB;
@@ -9,7 +13,7 @@ class DB
 
 	public static function &getInstance()
 	{
-		if (!self::$_DB instanceof PDO)
+		if (!self::$_DB instanceof \PDO)
 			self::$_DB = self::factoryConnection();
 		return self::$_DB;
 	}
@@ -19,11 +23,11 @@ class DB
 		$conf = Config::Get('DB');
 
 		try {
-			$DB = new PDO("mysql:host={$conf['HOSTNAME']};dbname={$conf['DB_NAME']}", $conf['DB_USER'], $conf['DB_PASS']);
+			$DB = new \PDO("mysql:host={$conf['HOSTNAME']};dbname={$conf['DB_NAME']}", $conf['DB_USER'], $conf['DB_PASS']);
 
-			$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$DB->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			die('Error Connection to Database!');
 		}
 

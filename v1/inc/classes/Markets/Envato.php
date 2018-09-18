@@ -12,6 +12,8 @@
  * Copyright 2018: mr4web.com
  */
 
+namespace MR4Web_API\Markets;
+
 class Envato {
 
 	private $_APIURL = 'http://marketplace.envato.com/api/edge/';

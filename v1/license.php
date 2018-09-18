@@ -1,7 +1,5 @@
 <?php
 
-define('START_TIME', microtime(true));
-
 include_once "init.php";
 
 /*
@@ -29,6 +27,6 @@ switch ($action)
 		break;
 }
 
-Res::emit();
+\MR4Web_API\Utils\Res::emit();
 
 ?>

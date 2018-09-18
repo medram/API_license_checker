@@ -1,5 +1,11 @@
 <?php
 
+namespace MR4Web_API\Utils;
+
+use MR4Web_API\Connections\DB;
+use MR4Web_API\Configs\Config;
+use MR4Web_API\Markets\Envato;
+
 class License {
 
 	private static $DB;
@@ -37,9 +43,9 @@ class License {
 
 			if ($stm->rowCount())
 			{
-				//print_r($stm->fetch(PDO::FETCH_ASSOC));
+				//print_r($stm->fetch(\PDO::FETCH_ASSOC));
 				if ($returnData)
-					return $stm->fetch(PDO::FETCH_ASSOC);
+					return $stm->fetch(\PDO::FETCH_ASSOC);
 				return true;
 			}
 			else
@@ -179,7 +185,7 @@ class License {
 			$insert->execute([$product->get('product_ID'), $customer->getID(), $this->_purchase_code, 0, 1,time()]);
 
 			$this->_data = $this->isOnDatabase(true);
-		} catch (PDOException $e){
+		} catch (\PDOException $e){
 			logger('Failed: '.$e->getMessage());
 			exit;
 		}

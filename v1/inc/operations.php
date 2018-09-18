@@ -1,5 +1,15 @@
 <?php
 
+use MR4Web_API\Connections\DB;
+use MR4Web_API\Configs\Config;
+use MR4Web_API\Markets\Envato;
+use MR4Web_API\Utils\License;
+use MR4Web_API\Utils\Customer;
+use MR4Web_API\Utils\Product;
+use MR4Web_API\Utils\Domain;
+use MR4Web_API\Utils\Res;
+
+
 function activate_operation()
 {
 	// connect to the database.
@@ -12,7 +22,7 @@ function activate_operation()
 	*/
 
 	// check all GET / POST parameters
-	$keys = array('code', 'domain', 'ip', 'c_name', 'c_email', 'p_name', 'p_version');
+	$keys = array('code', 'domain', 'ip', 'c_name', 'c_email', 'p_name', 'p_version', 'listener');
 	
 	if (!checkParams($keys))
 	{
@@ -20,8 +30,6 @@ function activate_operation()
 	}
 	else
 	{
-		Res::appendValidParams();
-
 		// create vars & instances (customer/product/...)
 		$code = strip_tags(_addslashes($_POST['code']));
 		$c_name = strip_tags(_addslashes($_POST['c_name']));
@@ -30,19 +38,24 @@ function activate_operation()
 		$p_version = strip_tags(_addslashes($_POST['p_version']));
 		$domain = strip_tags(_addslashes($_POST['domain']));
 		$ip = strip_tags(_addslashes($_POST['ip']));
+		$listener = strip_tags(_addslashes($_POST['listener']));
 
 		if (!filter_var($c_email, FILTER_VALIDATE_EMAIL) || 
-			!filter_var($ip, FILTER_VALIDATE_IP) || !filter_var($domain, FILTER_VALIDATE_URL))
+			!filter_var($ip, FILTER_VALIDATE_IP) || 
+			!filter_var($domain, FILTER_VALIDATE_URL) ||
+			!filter_var($listener, FILTER_VALIDATE_URL))
 		{
 			Res::appendInvalidParams();
 		}
 		else
 		{
+			Res::appendValidParams();
+
 			try {
 				$db->beginTransaction();
 
 				$license = new License($code);
-				$domain = new Domain($license, $ip, $domain);
+				$domain = new Domain($license, $ip, $domain, $listener);
 				$product = new Product($p_name, $p_version);
 				$customer = new Customer($license, $c_name, $c_email);
 

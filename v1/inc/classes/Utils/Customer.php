@@ -1,5 +1,11 @@
 <?php
 
+namespace MR4Web_API\Utils;
+
+use MR4Web_API\Connections\DB;
+use MR4Web_API\Configs\Config;
+use MR4Web_API\Utils\License;
+
 class Customer {
 	private $_license;
 	private $_name;
@@ -26,13 +32,13 @@ class Customer {
 
 			if ($stm->rowCount())
 			{
-				$this->_data = $stm->fetch(PDO::FETCH_ASSOC);
+				$this->_data = $stm->fetch(\PDO::FETCH_ASSOC);
 				$this->_ID = $this->_data['customer_ID'];
 			}
 			else
 				$this->_isNew = true;
 
-		} catch (PDOException $e){
+		} catch (\PDOException $e){
 			logger($e->getMessage());
 			exit;
 		}		

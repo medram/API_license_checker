@@ -1,5 +1,7 @@
 <?php
 
+namespace MR4Web_API\Utils;
+
 class Res {
 	private static $_res = array();
 

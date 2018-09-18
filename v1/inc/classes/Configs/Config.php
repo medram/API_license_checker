@@ -1,5 +1,7 @@
 <?php
 
+namespace MR4Web_API\Configs;
+
 class Config 
 {
 	private static $_config;
@@ -9,7 +11,7 @@ class Config
 
 	public static function Get($param=null)
 	{
-		if (is_null(self::$_config))
+		if (self::$_config == '')
 			self::Load();
 
 		if (isset(self::$_config[$param]))

@@ -1,17 +1,29 @@
 <?php
 
+namespace MR4Web_API\Utils;
+
+use MR4Web_API\Connections\DB;
+use MR4Web_API\Configs\Config;
+use MR4Web_API\Utils\License;
+use MR4Web_API\Utils\Product;
+
 class Domain {
 	private $_license;
 	private $_domain;
 	private $_IP;
+	private $_listener;
 	private $_data = array();
 	private static $DB;
 
-	public function __construct(License $license, $ip, $domain='')
+	public function __construct(License $license, $ip, $domain='', $listener='')
 	{
 		$this->_license = $license;
+
 		if (filter_var($domain, FILTER_VALIDATE_URL))
 			$this->_domain = preg_replace("/((https|http):\/\/)?/i", "", $domain);
+
+		if (filter_var($listener, FILTER_VALIDATE_URL))
+			$this->_listener = $listener;
 		
 		if (filter_var($ip, FILTER_VALIDATE_IP))
 			$this->_IP = $ip;
@@ -59,11 +71,12 @@ class Domain {
 			logger("registering domain...\n");
 			$time = time();
 
-			$stm = self::$DB->prepare("INSERT INTO `domains` (license_ID, IP, domain_name, product_version, active, created, last_modification, last_check, checks_num) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");	
+			$stm = self::$DB->prepare("INSERT INTO `domains` (license_ID, IP, domain_name, listener, product_version, active, created, last_modification, last_check, checks_num) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");	
 			$stm->execute(array(
 					$this->_license->get('license_ID'),
 					$this->getIP(),
 					$this->getDomainName(),
+					$this->_listener,
 					$product->getVersion(),
 					0, // 1 to activate the domain.
 					$time,
@@ -71,7 +84,7 @@ class Domain {
 					$time,
 					0
 				));
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			logger("ERROR: ".$e->getMessage());
 			exit;
 		}
@@ -91,10 +104,10 @@ class Domain {
 
 			if ($stm->rowCount())
 			{
-				$this->_data = $stm->fetch(PDO::FETCH_ASSOC);
+				$this->_data = $stm->fetch(\PDO::FETCH_ASSOC);
 				return $this->_data;
 			}
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			logger("ERROR: ".$e->getMessage());
 			exit;
 		}
