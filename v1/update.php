@@ -59,5 +59,5 @@ function notifyCustomerWithUpdate($productName)
 }
 
 notifyCustomerWithUpdate('ADLinker');
-notifyCustomerWithNews();
+//notifyCustomerWithNews();
 ?>
