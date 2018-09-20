@@ -9,17 +9,17 @@ use MR4Web_API\Utils\Update;
 use MR4Web_API\Pattern\NewsFactory;
 
 
-/*$action = isset($_POST['action'])? $_POST['action'] : '';
+$action = isset($argv[1])? $argv[1] : '';
 
 switch ($action)
 {
 	case 'news':
 		notifyCustomerWithNews();
 		break;
-	case 'update':
-		notifyCustomerWithUpdate();
+	case 'software':
+		notifyCustomerWithUpdate('ADLinker');
 		break;
-}*/
+}
 
 function notifyCustomerWithNews()
 {
@@ -58,6 +58,6 @@ function notifyCustomerWithUpdate($productName)
 	$updateObservable->notify();
 }
 
-notifyCustomerWithUpdate('ADLinker');
+//notifyCustomerWithUpdate('ADLinker');
 //notifyCustomerWithNews();
 ?>
